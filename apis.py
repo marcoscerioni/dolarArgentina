@@ -69,6 +69,17 @@ cont = obtenerJson(qubitD)
 qubitCompraDol = float(cont['buy_price'])
 qubitVentaDol = float(cont['sell_price'])
 
+
+# Decrypto DAI con Pesos
+cont = obtenerJson(decrypto)
+decrCDP = float(cont['data'][3]['dca'])  # Compra DAI Pesos
+decrVDP = float(cont['data'][3]['dcb'])  # Venta DAI Pesos
+
+# Decrypto DAI con Dolares
+decrCDD = float(cont['data'][2]['dca'])  # Compra DAI Pesos
+decrVDD = float(cont['data'][2]['dcb'])  # Venta DAI Pesos
+
+
 # Dolar Oficial
 cont = obtenerJson(dolar)
 dolarCOf = float((cont[0]['casa']['compra']).replace(',','.')) # Dolar oficial compra
@@ -90,4 +101,4 @@ dolarCBol = float((cont[4]['casa']['compra']).replace(',','.')) # Dolar blue com
 dolarVBol = float((cont[4]['casa']['venta']).replace(',','.')) # Dolar blue venta
 dolarVarBol = float((cont[4]['casa']['variacion']).replace(',','.')) # Dolar blue variacion
 
-print(dolarCBol, dolarVBol, dolarVarBol)
+print(decrCDP,  decrVDP, decrCDD, decrVDD)
