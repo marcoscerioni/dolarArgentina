@@ -9,7 +9,7 @@ def obtenerJson(url):
     return cont
 
 
-# Obtener comision
+# Obtener comision Ripio
 cont = obtenerJson(ripioComision)
 promedio = 291 * ((cont['fastestFee'] + cont['halfHourFee'] + cont['hourFee']) / 3)
 comisionDai = promedio * 0.1790313 / 8730
