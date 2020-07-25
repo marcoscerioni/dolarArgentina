@@ -68,3 +68,26 @@ qubitVenPes = float(cont['DAI'][2])  # Venta DAI en pesos
 cont = obtenerJson(qubitD)
 qubitCompraDol = float(cont['buy_price'])
 qubitVentaDol = float(cont['sell_price'])
+
+# Dolar Oficial
+cont = obtenerJson(dolar)
+dolarCOf = float((cont[0]['casa']['compra']).replace(',','.')) # Dolar oficial compra
+dolarVOf = float((cont[0]['casa']['venta']).replace(',','.')) # Dolar oficial venta
+dolarVarOf = float((cont[0]['casa']['variacion']).replace(',','.')) # Dolar oficial variacion
+
+# Dolar Blue
+dolarCBl = float((cont[1]['casa']['compra']).replace(',','.')) # Dolar blue compra
+dolarVBl = float((cont[1]['casa']['venta']).replace(',','.')) # Dolar blue venta
+dolarVarBl = float((cont[1]['casa']['variacion']).replace(',','.')) # Dolar blue variacion
+
+# Dolar Contado con liqui
+dolarCCCL = float((cont[3]['casa']['compra']).replace(',','.')) # Dolar blue compra
+dolarVCCL = float((cont[3]['casa']['venta']).replace(',','.')) # Dolar blue venta
+dolarVarCCL = float((cont[3]['casa']['variacion']).replace(',','.')) # Dolar blue variacion
+
+# Dolar Bolsa
+dolarCBol = float((cont[4]['casa']['compra']).replace(',','.')) # Dolar blue compra
+dolarVBol = float((cont[4]['casa']['venta']).replace(',','.')) # Dolar blue venta
+dolarVarBol = float((cont[4]['casa']['variacion']).replace(',','.')) # Dolar blue variacion
+
+print(dolarCBol, dolarVBol, dolarVarBol)
