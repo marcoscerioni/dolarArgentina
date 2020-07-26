@@ -22,7 +22,7 @@ def start(update, context):
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text="Bienvenido* " + name + "*, "
-             "al Bot de la criptomenda DAI"
+             "al Bot del CryptoDolar"
              " en Argentina \n\n"
              "Los comandos disponibles son: \n"
              "*/start* - Instrucciones del Bot. \n"
@@ -31,18 +31,32 @@ def start(update, context):
              'obtendrias en cada exchange. \n'
              "*/mejordaidolar* - Mejor opción para comprar DAI y"
              " luego venderlo a dólares. \n"
+             "*/dolar* - Muestra imagen con los valores del Dólar actualizado"
              "*/dolarcrypto* - Muestra el valor en el que se"
-             " comprarian dólares.\n"
+             " comprarian dólares con criptomendas.\n"
              "Otra opción para ver los comando es presionar"
              " la tecla '/'. ",
          parse_mode=ParseMode.MARKDOWN)
 
 
 def valordai(update, context):
+    buenbit, qubit, satoshi, ripio, decrypto = compraComision()
     user = update.message.from_user
     logger.info('El usuario %s (%s) puso valordai', user.full_name, user.username)
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text=valoresCompra())
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=
+        '*Valor DAI en cada exchange:*\n'
+        '|            Compra  |    Venta    |'
+        '|--------------------|-------------|'
+
+        '*BuenBit*   ' + str('%.2f' % buenbit) + '\n '+\
+        '*Qubit*     ' + str('%.2f' % qubit) + '\n '+\
+        '*Satoshi*   ' + str('%.2f' % satoshi) + '\n '+\
+        '*Ripio*    ' + str('%.2f' % ripio) + '\n '+\
+        '*Decrypto*  ' + str('%.2f' % decrypto),
+        parse_mode=ParseMode.MARKDOWN
+)
 
 
 def calc(update, context):
@@ -70,8 +84,10 @@ def mejorDaiDolar(update, context):
                              text=daiADolar())
 
 
-def sendDolarT(update, context):
+def dolar(update, context):
     dolarT()
+    user = update.message.from_user
+    logger.info('El usuario %s (%s) puso dolar', user.full_name, user.username)
     if os.path.exists('images/fig1.png'):
         context.bot.send_photo(chat_id=update.effective_chat.id, 
                                photo=open('images/fig1.png', 'rb'))
@@ -79,37 +95,12 @@ def sendDolarT(update, context):
 
 def dolarcrypto(update, context):
     user = update.message.from_user
-    esp = '           $ '
-    satoshi = satoshi_com_pes / satoshi_ven_dol
+    satoshi = satoshiCDP / satoshi_ven_dol
     logger.info('El usuario %s (%s) puso dolarcrypto', user.full_name, user.username)
     context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text='*\nPrecio del Dólar:*\n\n'
-                             
-        '                       *Compra     |     Venta     |         Variación*\n'
-
-        '*Oficial*' + esp + str('%.3f' % dolarCOf) +\
-                    esp + str('%.3f' % dolarVOf) +\
-                    esp + str('%.2f' % dolarVarOf) + '\n'
-        '*Impuesto PAIS*' + '     $ ' +\
-                        str('%.3f' % (dolarCOf * 1.3)) +\
-                        esp + str('%.3f' % (dolarVOf * 1.3)) +\
-                        esp + str('%.2f' % (dolarVarOf * 1.3)) + '\n'
-
-         '*Blue*' + '              $ ' +\
-                  str('%.2f' % dolarCBl) +\
-                  esp + str('%.2f' % dolarVBl) +\
-                  esp + str('%.2f' % dolarVarBl) + '\n'
-         '*C.C.L.*' + '            $ ' +\
-                    str('%.2f' % dolarCCCL) +\
-                    esp + str('%.2f' % dolarVCCL) +\
-                    esp + str('%.2f' % dolarVarCCL) + '\n'
-         '*Bolsa*' + '             $ ' +\
-                   str('%.2f' % dolarCBol) +\
-                   esp + str('%.2f' % dolarVBol) +\
-
-
-         '\n\n\n*Decrypto DAI*' + '      $ ' + '\n'
+        text=
+         '\n*Decrypto DAI*' + '      $ ' + '\n'
          '*Decrypto USDT*' + '     $ ' + '\n'
          '*SatoshiTango*' + '      $ ' + str('%.4f' % satoshi) + '\n'
          '*BuenBit*' + '              ' + ' NO PERMITIDO\n'
@@ -123,7 +114,7 @@ updater.dispatcher.add_handler(CommandHandler('start', start))
 updater.dispatcher.add_handler(CommandHandler('valordai', valordai))
 updater.dispatcher.add_handler(CommandHandler('calc', calc))
 updater.dispatcher.add_handler(CommandHandler('mejordaidolar', mejorDaiDolar))
-updater.dispatcher.add_handler(CommandHandler('sendDolarT', sendDolarT))
+updater.dispatcher.add_handler(CommandHandler('dolar', dolar))
 updater.dispatcher.add_handler(CommandHandler('dolarcrypto', dolarcrypto))
 
 
