@@ -1,6 +1,7 @@
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
+from telegram import ParseMode
 import logging
 from valores import *
 from auth import token
@@ -15,35 +16,36 @@ logger = logging.getLogger(__name__)
 
 def start(update, context):
     user = update.message.from_user
-    logger.info('El usuario %s puso start', user.first_name)
+    logger.info('El usuario %s (%s) puso start', user.full_name, user.username)
     name = user.first_name
     context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="Bienvenido " + name + ", "
+                             text="Bienvenido* " + name + "*, "
                              "al Bot de la criptomenda DAI"
                              " en Argentina \n\n"
                              "Los comandos disponibles son: \n"
-                             "/start - Instrucciones del Bot. \n"
-                             "/valordai - Valor del DAI.\n"
-                             "/calc NUMERO - Calcula la cantidad que DAI que "
+                             "*/start* - Instrucciones del Bot. \n"
+                             "*/valordai* - Valor del DAI.\n"
+                             "*/calc* NUMERO - Calcula la cantidad que DAI que "
                              'obtendrias en cada exchange. \n'
-                             "/mejordaidolar - Mejor opción para comprar DAI y"
+                             "*/mejordaidolar* - Mejor opción para comprar DAI y"
                              " luego venderlo a dólares. \n"
-                             "/dolarcrypto - Muestra el valor en el que se"
+                             "*/dolarcrypto* - Muestra el valor en el que se"
                              " comprarian dólares.\n"
                              "Otra opción para ver los comando es presionar"
-                             " la tecla '/' y ahi aparecerán los comandos")
+                             " la tecla '/' y ahi aparecerán los comandos",
+                             parse_mode=ParseMode.MARKDOWN)
 
 
 def valordai(update, context):
     user = update.message.from_user
-    logger.info('El usuario %s puso valordai', user.first_name)
+    logger.info('El usuario %s (%s) puso valordai', user.full_name, user.username)
     context.bot.send_message(chat_id=update.effective_chat.id,
                              text=valoresCompra())
 
 
 def calc(update, context):
     user = update.message.from_user
-    logger.info('El usuario %s puso calc', user.first_name)
+    logger.info('El usuario %s (%s) puso calc', user.full_name, user.username)
     if (len(context.args) == 1):
         try:
             input = int(context.args[0])
@@ -61,14 +63,14 @@ def calc(update, context):
 
 def mejorDaiDolar(update, context):
     user = update.message.from_user
-    logger.info('El usuario %s puso mejorDaiDolar', user.first_name)
+    logger.info('El usuario %s (%s) puso mejorDaiDolar', user.full_name, user.username)
     context.bot.send_message(chat_id=update.effective_chat.id,
                              text=daiADolar())
 
 
 def dolarcrypto(update, context):
     user = update.message.from_user
-    logger.info('El usuario %s puso dolarcrypto', user.first_name)
+    logger.info('El usuario %s (%s) puso dolarcrypto', user.full_name, user.username)
     context.bot.send_message(chat_id=update.effective_chat.id,
                              text=valorDelDolar())
 
