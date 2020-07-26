@@ -163,3 +163,46 @@ def valorDelDolar():
     mensaje += 'Oficial: ' + str(dolarCOf) + str(dolarVOf)
     mensaje += 'Blue' + str(dolarCBl) + str(dolarVBl)
     return mensaje
+
+
+import plotly.graph_objects as go
+import os
+
+
+
+def dolarT():
+    headerColor = 'grey'
+    rowEvenColor = 'lightgrey'
+    rowOddColor = 'white'
+    fig = go.Figure(data=[go.Table(
+    header=dict(
+    values=['<b></b>','<b>Compra</b>','<b>Venta</b>','<b>Variación</b>'],
+    line_color='darkslategray',
+    fill_color=headerColor,
+    align=['right','center'],
+    font=dict(color='white', size=15)
+  ),
+    cells=dict(
+    values=[
+      ['<b>Oficial</b>', '<b>Con 30%</b>', '<b>Blue</b>', '<b>C.C.L.</b>', '<b>Bolsa</b>'],
+      [dolarCOf, '%.2f' % (dolarCOf * 1.3), dolarCBl, dolarCCCL, dolarCBol],
+      [dolarVOf, '%.2f' % (dolarVOf * 1.3), dolarVBl, dolarVCCL, dolarVBol],
+      [dolarVarOf, '%.2f' % (dolarVarOf * 1.3), dolarVarBl, dolarVarCCL, dolarVarBol]],
+    line_color='darkslategray',
+    fill_color = [[rowOddColor,rowEvenColor,rowOddColor, rowEvenColor,rowOddColor]*5],
+    align = ['center', 'center'],
+    font = dict(color = 'darkslategray', size = 15)
+        ))
+    ])
+    fig.update_layout(title={
+        'text':'Precio Dólar hoy',
+        'y':0.9,
+        'x':0.5,
+        'xanchor': 'center',
+        'yanchor': 'top'
+        })
+    if not os.path.exists("images"):
+        os.mkdir("images")
+    fig.write_image("images/fig1.png")
+
+dolarT()

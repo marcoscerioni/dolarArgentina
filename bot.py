@@ -19,22 +19,23 @@ def start(update, context):
     user = update.message.from_user
     logger.info('El usuario %s (%s) puso start', user.full_name, user.username)
     name = user.first_name
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="Bienvenido* " + name + "*, "
-                             "al Bot de la criptomenda DAI"
-                             " en Argentina \n\n"
-                             "Los comandos disponibles son: \n"
-                             "*/start* - Instrucciones del Bot. \n"
-                             "*/valordai* - Valor del DAI.\n"
-                             "*/calc* NUMERO - Calcula la cantidad que DAI que "
-                             'obtendrias en cada exchange. \n'
-                             "*/mejordaidolar* - Mejor opción para comprar DAI y"
-                             " luego venderlo a dólares. \n"
-                             "*/dolarcrypto* - Muestra el valor en el que se"
-                             " comprarian dólares.\n"
-                             "Otra opción para ver los comando es presionar"
-                             " la tecla '/'. ",
-                             parse_mode=ParseMode.MARKDOWN)
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="Bienvenido* " + name + "*, "
+             "al Bot de la criptomenda DAI"
+             " en Argentina \n\n"
+             "Los comandos disponibles son: \n"
+             "*/start* - Instrucciones del Bot. \n"
+             "*/valordai* - Valor del DAI.\n"
+             "*/calc* NUMERO - Calcula la cantidad que DAI que "
+             'obtendrias en cada exchange. \n'
+             "*/mejordaidolar* - Mejor opción para comprar DAI y"
+             " luego venderlo a dólares. \n"
+             "*/dolarcrypto* - Muestra el valor en el que se"
+             " comprarian dólares.\n"
+             "Otra opción para ver los comando es presionar"
+             " la tecla '/'. ",
+         parse_mode=ParseMode.MARKDOWN)
 
 
 def valordai(update, context):
@@ -69,6 +70,13 @@ def mejorDaiDolar(update, context):
                              text=daiADolar())
 
 
+def sendDolarT(update, context):
+    dolarT()
+    if os.path.exists('images/fig1.png'):
+        context.bot.send_photo(chat_id=update.effective_chat.id, 
+                               photo=open('images/fig1.png', 'rb'))
+
+
 def dolarcrypto(update, context):
     user = update.message.from_user
     esp = '           $ '
@@ -99,20 +107,23 @@ def dolarcrypto(update, context):
          '*Bolsa*' + '             $ ' +\
                    str('%.2f' % dolarCBol) +\
                    esp + str('%.2f' % dolarVBol) +\
-                   esp + str('%.2f' % dolarVarBol) + '\n'
+
 
          '\n\n\n*Decrypto DAI*' + '      $ ' + '\n'
          '*Decrypto USDT*' + '     $ ' + '\n'
          '*SatoshiTango*' + '      $ ' + str('%.4f' % satoshi) + '\n'
-         '*BuenBit*' + '              ' + 'MOMENTANEAMENTE NO PERMITIDO\n'
-         "*Qubit Brokers*" + "       " + "MOMENTANEAMENTE NO PERMITIDO\n",
+         '*BuenBit*' + '              ' + ' NO PERMITIDO\n'
+         "*Qubit Brokers*" + "       " + " NO PERMITIDO\n",
          parse_mode=ParseMode.MARKDOWN)
+
+
 
 
 updater.dispatcher.add_handler(CommandHandler('start', start))
 updater.dispatcher.add_handler(CommandHandler('valordai', valordai))
 updater.dispatcher.add_handler(CommandHandler('calc', calc))
 updater.dispatcher.add_handler(CommandHandler('mejordaidolar', mejorDaiDolar))
+updater.dispatcher.add_handler(CommandHandler('sendDolarT', sendDolarT))
 updater.dispatcher.add_handler(CommandHandler('dolarcrypto', dolarcrypto))
 
 

@@ -101,4 +101,4 @@ dolarCBol = float((cont[4]['casa']['compra']).replace(',','.')) # Dolar blue com
 dolarVBol = float((cont[4]['casa']['venta']).replace(',','.')) # Dolar blue venta
 dolarVarBol = float((cont[4]['casa']['variacion']).replace(',','.')) # Dolar blue variacion
 
-print(decrCDP,  decrVDP, decrCDD, decrVDD)
+
