@@ -4,7 +4,8 @@ from telegram.ext import MessageHandler, Filters
 from telegram import ParseMode
 import logging
 from valores import *
-from auth import token
+from auth import *
+from apis import *
 
 updater = Updater(token=token, use_context=True)
 
@@ -32,7 +33,7 @@ def start(update, context):
                              "*/dolarcrypto* - Muestra el valor en el que se"
                              " comprarian dólares.\n"
                              "Otra opción para ver los comando es presionar"
-                             " la tecla '/' y ahi aparecerán los comandos",
+                             " la tecla '/'. ",
                              parse_mode=ParseMode.MARKDOWN)
 
 
@@ -70,9 +71,42 @@ def mejorDaiDolar(update, context):
 
 def dolarcrypto(update, context):
     user = update.message.from_user
+    esp = '           $ '
+    satoshi = satoshi_com_pes / satoshi_ven_dol
     logger.info('El usuario %s (%s) puso dolarcrypto', user.full_name, user.username)
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text=valorDelDolar())
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text='*\nPrecio del Dólar:*\n\n'
+                             
+        '                       *Compra     |     Venta     |         Variación*\n'
+
+        '*Oficial*' + esp + str('%.3f' % dolarCOf) +\
+                    esp + str('%.3f' % dolarVOf) +\
+                    esp + str('%.2f' % dolarVarOf) + '\n'
+        '*Impuesto PAIS*' + '     $ ' +\
+                        str('%.3f' % (dolarCOf * 1.3)) +\
+                        esp + str('%.3f' % (dolarVOf * 1.3)) +\
+                        esp + str('%.2f' % (dolarVarOf * 1.3)) + '\n'
+
+         '*Blue*' + '              $ ' +\
+                  str('%.2f' % dolarCBl) +\
+                  esp + str('%.2f' % dolarVBl) +\
+                  esp + str('%.2f' % dolarVarBl) + '\n'
+         '*C.C.L.*' + '            $ ' +\
+                    str('%.2f' % dolarCCCL) +\
+                    esp + str('%.2f' % dolarVCCL) +\
+                    esp + str('%.2f' % dolarVarCCL) + '\n'
+         '*Bolsa*' + '             $ ' +\
+                   str('%.2f' % dolarCBol) +\
+                   esp + str('%.2f' % dolarVBol) +\
+                   esp + str('%.2f' % dolarVarBol) + '\n'
+
+         '\n\n\n*Decrypto DAI*' + '      $ ' + '\n'
+         '*Decrypto USDT*' + '     $ ' + '\n'
+         '*SatoshiTango*' + '      $ ' + str('%.4f' % satoshi) + '\n'
+         '*BuenBit*' + '              ' + 'MOMENTANEAMENTE NO PERMITIDO\n'
+         "*Qubit Brokers*" + "       " + "MOMENTANEAMENTE NO PERMITIDO\n",
+         parse_mode=ParseMode.MARKDOWN)
 
 
 updater.dispatcher.add_handler(CommandHandler('start', start))
