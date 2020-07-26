@@ -153,8 +153,13 @@ def valorDelDolar():
     satoshi = satoshi_com_pes / satoshi_ven_dol
     qubit = qubitCompDolardirecto
     mensaje = 'Precio del Dólar en:\n\n'
-    mensaje += "Buenbit  $" + str('%.4f' % buenbit) + '\n' +\
-               "  NO FUNCIONA ACTUALMENTE"
+    mensaje += "Buenbit  $" + str('%.4f' % buenbit) +\
+               "   NO FUNCIONA ACTUALMENTE\n"
     mensaje += "Satoshi  $" + str('%.4f' % satoshi) + '\n'
-    mensaje += "Qubit     $" + str('%.4f' % qubit)
+    mensaje += "Qubit     $" + str('%.4f' % qubit) +\
+               "   NO FUNCIONA ACTUALMENTE \n"
+    mensaje += '\n                 Dolar \n'
+    mensaje += '          Compra    |   Venta'
+    mensaje += 'Oficial: ' + str(dolarCOf) + str(dolarVOf)
+    mensaje += 'Blue' + str(dolarCBl) + str(dolarVBl)
     return mensaje
