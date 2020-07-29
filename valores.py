@@ -10,58 +10,45 @@ nombres.update(dict.fromkeys([8, 9, 10, 11], exchanges[2]))
 nombres.update(dict.fromkeys([12, 13, 14, 15], exchanges[3]))
 
 
-# def valoresCompra():
-#     espacio = "            "
-#     mensaje = "Los valores del DAI en cada exchange son los siguientes:\n\n "
-#     mensaje += "           Buenbit\n"
-#     mensaje += "----------------------------\n"
-#     mensaje += "  Compra           Venta\n"
-#     mensaje += " $" + str('%.2f' % bbCDP) + espacio + '$'
-#     mensaje += str('%.2f' % bbVDP) + "\n"
-#     mensaje += " USD " + str('%.2f' % buenbit_com_dol) + "           " + 'USD '
-#     mensaje += str('%.2f' % buenbit_ven_dol) + "\n"
-#     mensaje += "----------------------------\n"
-#     mensaje += "\n\n"
+def cDPCom():
+    # Compra de DAI en cada exchange.
+    buenbit = bbCDP              # No tiene comisión BB.
+    qubit = qubitCDP             # Para comprar no tiene comision.
+    satoshi = satoshiCDP * 1.01  # Comision del 1% la compra.
+    ripio = ripioCDP * 1.01      # Comision del 1% la compra.
+    decrypto = decrCDP * 1.0035  # Comision del 0.35% la compra.
+    return buenbit, qubit, satoshi, ripio, decrypto
 
-#     mensaje += "       SatoshiTango\n"
-#     mensaje += "----------------------------\n"
-#     mensaje += "  Compra           Venta\n"
-#     mensaje += " $" + str('%.2f' % satoshiCDP) + espacio + '$'
-#     mensaje += str('%.2f' % satoshiVDP) + "\n"
-#     mensaje += " USD " + str('%.2f' % satoshi_com_dol) + "           " + 'USD '
-#     mensaje += str('%.2f' % satoshi_ven_dol) + "\n"
-#     mensaje += "----------------------------\n"
-#     mensaje += "\n\n"
-
-#     mensaje += "              Ripio\n"
-#     mensaje += "----------------------------\n"
-#     mensaje += "   Compra           Venta\n"
-#     mensaje += "  $" + str('%.2f' % ripioCDP) + espacio + '$'
-#     mensaje += str('%.2f' % ripioVDP) + "\n"
-#     mensaje += "  USD -" + "                " + 'USD -\n'
-#     mensaje += "----------------------------\n"
-#     mensaje += "\n\n"
-
-#     mensaje += "              Qubit\n"
-#     mensaje += "----------------------------\n"
-#     mensaje += "   Compra           Venta\n"
-#     mensaje += "  $" + str('%.2f' % qubitCDP) + espacio + '$'
-#     mensaje += str('%.2f' % qubitVDP) + "\n"
-#     mensaje += "  USD " + str('%.2f' % qubitCompDol) + "          "
-#     mensaje += 'USD -\n'
-#     mensaje += "----------------------------\n"
-#     return mensaje
+def vDPCom():
+    # Venta de DAI en cada exchange en PESOS.
+    buenbit = bbVDP              # No tiene comisión BB.
+    qubit = qubitVDP             # Para venta no tiene comision.
+    satoshi = satoshiVDP * 0.99  # Comision del 1% la compra. (solo Transferencia)
+    ripio = ripioVDP * 0.99      # Comision del 1% la compra.
+    decrypto = decrVDP * 0.9965  # Comision del 0.35% la compra.
+    return buenbit, qubit, satoshi, ripio, decrypto
 
 
-def compraComision():
-     buenbit = bbCDP              # No tiene comisión BB.
-     qubit = qubitCDP             # Para comprar no tiene comision.
-     satoshi = satoshiCDP * 1.01  # Comision del 1% la compra. (solo Transferencia)
-     ripio = ripioCDP * 1.01      # Comision del 1% la compra.
-     decrypto = decrCDP * 1.0035  # Comision del 0.35% la compra.
-     return buenbit, qubit, satoshi, ripio, decrypto
 
-print(compraComision())
+def daiDolar():
+    # Vender DAI en todos los exchanges. Mejor opción.
+    buenbit, qubit, satoshi, ripio, decrypto = cDPCom()
+    baS = buenbit * satoshiVDD * 0.99
+    baD = buenbit * decrVDD * 0.9965 * 0.988  # Sacar USD 1.2%
+
+    qaS = (qubit - 0.7) * satoshiVDD * 0.99
+    qaD = (qubit - 0.7) * decrVDD * 0.9965 * 0.988  # Sacar USD 1.2%
+
+    saS = satoshi * satoshiVDD * 0.99
+    saD = (satoshi - 0.5) * decrVDD * 0.9965 * 0.988  # Sacar USD 1.2%
+
+    raS = (ripio - comRipio) * satoshiVDD * 0.99
+    raD = (ripio - comRipio) * decrVDD * 0.9965 * 0.988  # Sacar USD 1.2%
+
+    daD = decrypto * decrVDD * 0.9965 * 0.988  # Sacar USD 1.2%
+    daS = decrypto * satoshiVDD * 0.99
+
+    return baS, baD, qaS, qaD, saS, saD, raS, raD, daD, daS
 
 
 inversion = 1000
@@ -89,10 +76,10 @@ def ventaDAIPesos():
     SenR = (daiS - 0.1) * ripioVDP * comision
     SenQ = (daiS - 0.1) * qubitVDP
 
-    RenB = (daiR - comisionDai) * bbVDP
-    RenS = (daiR - comisionDai) * satoshiVDP * comision
+    RenB = (daiR - comRipio) * bbVDP
+    RenS = (daiR - comRipio) * satoshiVDP * comision
     RenR = daiR * ripioVDP * comision
-    RenQ = (daiR - comisionDai) * qubitVDP
+    RenQ = (daiR - comRipio) * qubitVDP
 
     QenB = daiQ * bbVDP
     QenS = daiQ * satoshiVDP * comision
@@ -126,16 +113,16 @@ def daiAPesos():
 def venDaiaDolar():
     daiB, daiS, daiR, daiQ = compraDAI(inversion)
     BenB = daiB * buenbit_com_dol
-    BenS = daiB * satoshi_com_dol * comision
+    BenS = daiB * satoshiCDD * comision
 
     SenB = (daiS - 0.1) * buenbit_com_dol
-    SenS = daiS * satoshi_com_dol * comision
+    SenS = daiS * satoshiCDD * comision
 
-    RenB = (daiR - comisionDai) * buenbit_com_dol
-    RenS = (daiR - comisionDai) * satoshi_com_dol * comision
+    RenB = (daiR - comRipio) * buenbit_com_dol
+    RenS = (daiR - comRipio) * satoshiCDD * comision
 
     QenB = daiQ * buenbit_com_dol
-    QenS = daiQ * satoshi_com_dol * comision
+    QenS = daiQ * satoshiCDD * comision
 
     return (BenB, BenS, 0, 0, SenB, SenS, 0, 0, RenB, RenS, 0, 0, QenB, QenS)
 
@@ -161,7 +148,7 @@ def opcionDai(inv):
 
 def valorDelDolar():
     buenbit = bbCDP / buenbit_ven_dol
-    satoshi = satoshiCDP / satoshi_ven_dol
+    satoshi = satoshiCDP / satoshiVDD
     qubit = qubitCompDolardirecto
     mensaje = 'Precio del Dólar en:\n\n'
     mensaje += "Buenbit  $" + str('%.4f' % buenbit) +\

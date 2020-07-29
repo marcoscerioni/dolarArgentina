@@ -12,7 +12,7 @@ def obtenerJson(url):
 # Obtener comision Ripio
 cont = obtenerJson(ripioComision)
 promedio = 291 * ((cont['fastestFee'] + cont['halfHourFee'] + cont['hourFee']) / 3)
-comisionDai = promedio * 0.1790313 / 8730
+comRipio = promedio * 0.1790313 / 8730
 
 
 # Satochi DAI pesos.
@@ -23,8 +23,8 @@ satoshiVDP = float(cont['data']['ticker']['DAI']['bid'])
 
 # Satoshi DAI Dolares.
 cont = obtenerJson(satoshiDolar)
-satoshi_com_dol = float(cont['data']['ticker']['DAI']['ask'])
-satoshi_ven_dol = float(cont['data']['ticker']['DAI']['bid'])
+satoshiCDD = float(cont['data']['ticker']['DAI']['ask'])
+satoshiVDD = float(cont['data']['ticker']['DAI']['bid'])
 
 
 

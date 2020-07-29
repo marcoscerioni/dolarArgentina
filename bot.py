@@ -3,6 +3,7 @@ from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
 from telegram import ParseMode
 import logging
+import numpy as np
 from valores import *
 from auth import *
 from apis import *
@@ -40,21 +41,29 @@ def start(update, context):
 
 
 def valordai(update, context):
-    buenbit, qubit, satoshi, ripio, decrypto = compraComision()
+    buenbitC, qubitC, satoshiC, ripioC, decryptoC = cDPCom()
+    buenbitV, qubitV, satoshiV, ripioV, decryptoV = vDPCom()
+
     user = update.message.from_user
     logger.info('El usuario %s (%s) puso valordai', user.full_name, user.username)
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=
-        '*Valor DAI en cada exchange:*\n'
-        '|            Compra  |    Venta    |'
-        '|--------------------|-------------|'
-
-        '*BuenBit*   ' + str('%.2f' % buenbit) + '\n '+\
-        '*Qubit*     ' + str('%.2f' % qubit) + '\n '+\
-        '*Satoshi*   ' + str('%.2f' % satoshi) + '\n '+\
-        '*Ripio*    ' + str('%.2f' % ripio) + '\n '+\
-        '*Decrypto*  ' + str('%.2f' % decrypto),
+        '```'
+        '\n    Valor DAI en cada exchange\n'
+        '|          Compra   |    Venta   |\n'
+        '|-------------------|------------|\n'
+        '|BuenBit  $ ' + str('%.2f' % buenbitC) + '  |  $ ' +\
+            str('%.2f' % buenbitV) + '  |\n'
+        '|Qubit    $ ' + str('%.2f' % qubitC) + '  |  $ ' +\
+            str('%.2f' % qubitV) + '  |\n'
+        '|Satoshi  $ ' + str('%.2f' % satoshiC) + '  |  $ ' +\
+            str('%.2f' % satoshiV) + '  |\n'
+        '|Ripio    $ ' + str('%.2f' % ripioC) + '  |  $ ' +\
+            str('%.2f' % ripioV) + '  |\n'
+        '|Decrypto $ ' + str('%.2f' % decryptoC) + '  |  $ ' +\
+            str('%.2f' % decryptoV) + '  |\n'
+        '```',
         parse_mode=ParseMode.MARKDOWN
 )
 
@@ -77,11 +86,26 @@ def calc(update, context):
                                  'Por ejemplo /calc 10000')
 
 
-def mejorDaiDolar(update, context):
+def daidolar(update, context):
     user = update.message.from_user
-    logger.info('El usuario %s (%s) puso mejorDaiDolar', user.full_name, user.username)
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text=daiADolar())
+    logger.info('El usuario %s (%s) puso daidolar', user.full_name, user.username)
+    baS, baD, qaS, qaD, saS, saD, raS, raD, daD, daS = daiDolar()
+
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text='*Comprar DAI y venderlo a dólares:*\n\n'
+             '```De Buenbit a Satoshi:     USD ' + str('%.4f' % baS) + '\n'
+             'De Buenbit a Decrypto:    USD ' + str('%.4f' % baD) + '\n'
+             'De Qubit a Satoshi:       USD ' + str('%.4f' % qaS) + '\n'
+             'De Qubit a Decrypto:      USD ' + str('%.4f' % qaD) + '\n'
+             'De Satoshi a Satoshi:     USD ' + str('%.4f' % saS) + '\n'
+             'De Satoshi a Decrypto:    USD ' + str('%.4f' % saD) + '\n'
+             'De Ripio a Satoshi:       USD ' + str('%.4f' % raS) + '\n'
+             'De Ripio a Decrypto:      USD ' + str('%.4f' % raD) + '\n'
+             'De Decrypto a Satoshi:    USD ' + str('%.4f' % daD) + '\n'
+             'De Decrypto a Decrypto:   USD ' + str('%.4f' % daS) + '```\n',
+        parse_mode=ParseMode.MARKDOWN
+        )
 
 
 def dolar(update, context):
@@ -95,7 +119,7 @@ def dolar(update, context):
 
 def dolarcrypto(update, context):
     user = update.message.from_user
-    satoshi = satoshiCDP / satoshi_ven_dol
+    satoshi = satoshiCDP / satoshiVDD
     logger.info('El usuario %s (%s) puso dolarcrypto', user.full_name, user.username)
     context.bot.send_message(
         chat_id=update.effective_chat.id,
@@ -113,7 +137,7 @@ def dolarcrypto(update, context):
 updater.dispatcher.add_handler(CommandHandler('start', start))
 updater.dispatcher.add_handler(CommandHandler('valordai', valordai))
 updater.dispatcher.add_handler(CommandHandler('calc', calc))
-updater.dispatcher.add_handler(CommandHandler('mejordaidolar', mejorDaiDolar))
+updater.dispatcher.add_handler(CommandHandler('daidolar', daidolar))
 updater.dispatcher.add_handler(CommandHandler('dolar', dolar))
 updater.dispatcher.add_handler(CommandHandler('dolarcrypto', dolarcrypto))
 
