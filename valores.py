@@ -1,6 +1,8 @@
 import numpy as np
 from apis import *
-# import time
+import plotly.graph_objects as go
+import os
+
 
 exchanges = ['Buenbit', 'Satoshi', 'Ripio', 'Qubit']
 
@@ -23,9 +25,9 @@ def vDPCom():
     # Venta de DAI en cada exchange en PESOS.
     buenbit = bbVDP              # No tiene comisión BB.
     qubit = qubitVDP             # Para venta no tiene comision.
-    satoshi = satoshiVDP * 0.99  # Comision del 1% la compra. (solo Transferencia)
-    ripio = ripioVDP * 0.99      # Comision del 1% la compra.
-    decrypto = decrVDP * 0.9965  # Comision del 0.35% la compra.
+    satoshi = satoshiVDP * 1.01  # Comision del 1% la compra. (solo Transferencia)
+    ripio = ripioVDP * 1.01      # Comision del 1% la compra.
+    decrypto = decrVDP * 1.0035  # Comision del 0.35% la compra.
     return buenbit, qubit, satoshi, ripio, decrypto
 
 
@@ -33,139 +35,22 @@ def vDPCom():
 def daiDolar():
     # Vender DAI en todos los exchanges. Mejor opción.
     buenbit, qubit, satoshi, ripio, decrypto = cDPCom()
-    baS = buenbit * satoshiVDD * 0.99
-    baD = buenbit * decrVDD * 0.9965 * 0.988  # Sacar USD 1.2%
+    baS = (buenbit / satoshiVDD) * 1.01
+    baD = (buenbit / decrVDD) * 1.0035 * 1.012  # Sacar USD 1.2%
 
-    qaS = (qubit - 0.7) * satoshiVDD * 0.99
-    qaD = (qubit - 0.7) * decrVDD * 0.9965 * 0.988  # Sacar USD 1.2%
+    qaS = ((qubit - 0.7) / satoshiVDD) * 1.01
+    qaD = ((qubit - 0.7) / decrVDD) * 1.0035 * 1.012  # Sacar USD 1.2%
 
-    saS = satoshi * satoshiVDD * 0.99
-    saD = (satoshi - 0.5) * decrVDD * 0.9965 * 0.988  # Sacar USD 1.2%
+    saS = (satoshi / satoshiVDD) * 1.01
+    saD = ((satoshi - 0.5) / decrVDD) * 1.0035 * 1.012  # Sacar USD 1.2%
 
-    raS = (ripio - comRipio) * satoshiVDD * 0.99
-    raD = (ripio - comRipio) * decrVDD * 0.9965 * 0.988  # Sacar USD 1.2%
+    raS = ((ripio - comRipio) / satoshiVDD) * 1.01
+    raD = ((ripio - comRipio) / decrVDD) * 1.0035 * 1.012  # Sacar USD 1.2%
 
-    daD = decrypto * decrVDD * 0.9965 * 0.988  # Sacar USD 1.2%
-    daS = decrypto * satoshiVDD * 0.99
+    daD = (decrypto / decrVDD) * 1.0035 * 1.012 # Sacar USD 1.2%
+    daS = (decrypto / satoshiVDD) * 1.01
 
     return baS, baD, qaS, qaD, saS, saD, raS, raD, daD, daS
-
-
-inversion = 1000
-comision = 0.99  # (100 - 1) / 100. Comision 1%
-
-
-def compraDAI(inv):
-    pesos = inv
-    daiB = pesos / bbCDP
-    daiS = inv * 0.9888 / satoshiCDP * comision  # comision de 1.12%
-    daiR = inv / ripioCDP * comision
-    daiQ = pesos / qubitCDP
-    return daiB, daiS, daiR, daiQ
-
-
-def ventaDAIPesos():
-    daiB, daiS, daiR, daiQ = compraDAI(inversion)
-    BenB = daiB * bbVDP
-    BenS = daiB * satoshiVDP * comision
-    BenR = daiB * ripioVDP * comision
-    BenQ = daiB * qubitVDP
-
-    SenB = (daiS - 0.1) * bbVDP
-    SenS = daiS * satoshiVDP * comision
-    SenR = (daiS - 0.1) * ripioVDP * comision
-    SenQ = (daiS - 0.1) * qubitVDP
-
-    RenB = (daiR - comRipio) * bbVDP
-    RenS = (daiR - comRipio) * satoshiVDP * comision
-    RenR = daiR * ripioVDP * comision
-    RenQ = (daiR - comRipio) * qubitVDP
-
-    QenB = daiQ * bbVDP
-    QenS = daiQ * satoshiVDP * comision
-    QenR = daiQ * ripioVDP * comision
-    QenQ = daiQ * qubitVDP
-
-    return BenB, BenS, BenR, BenQ, SenB,
-    SenS, SenR, SenQ, RenB, RenS, RenR, RenQ,
-    QenB, QenS, QenR, QenQ
-
-
-valoresPesos = ventaDAIPesos()
-indicePesos = np.argmax(valoresPesos)
-maximo = max(valoresPesos)
-
-
-def daiAPesos():
-    comprar = nombres[indicePesos]
-    vender = exchanges[indicePesos % 4]
-    mensaje = ''
-    pesosCambiados = max(valoresPesos)
-    if(pesosCambiados > inversion):
-        mensaje += 'Compra DAI en ' + comprar +\
-                   ' y vende DAI a pesos en ' + vender
-        diferencia = (pesosCambiados / inversion - 1) * 100
-        mensaje += ' Vas a ganar' + str(round(diferencia, 2)) +\
-                   '% en pesos'
-    return mensaje
-
-
-def venDaiaDolar():
-    daiB, daiS, daiR, daiQ = compraDAI(inversion)
-    BenB = daiB * buenbit_com_dol
-    BenS = daiB * satoshiCDD * comision
-
-    SenB = (daiS - 0.1) * buenbit_com_dol
-    SenS = daiS * satoshiCDD * comision
-
-    RenB = (daiR - comRipio) * buenbit_com_dol
-    RenS = (daiR - comRipio) * satoshiCDD * comision
-
-    QenB = daiQ * buenbit_com_dol
-    QenS = daiQ * satoshiCDD * comision
-
-    return (BenB, BenS, 0, 0, SenB, SenS, 0, 0, RenB, RenS, 0, 0, QenB, QenS)
-
-
-def daiADolar():
-    valores = venDaiaDolar()
-    comprar = nombres[np.argmax(valores)]
-    vender = exchanges[np.argmax(valores) % 4]
-    mensaje = 'La mejor opción de comprar DAIs y venderlo a dólares es:\n\n' +\
-        'Comprar DAI en ' + comprar + ' y venderlo en ' + vender
-    return mensaje
-
-
-def opcionDai(inv):
-    daiB, daiS, daiR, daiQ = compraDAI(inv)
-    mensaje = 'Con una inversión de $ ' + str(inv) + ' obtenes en: \n\n'
-    mensaje += 'Buenbit ---- ' + str('%.4f' % daiB) + ' DAI\n'
-    mensaje += 'Satoshi ---- ' + str('%.4f' % daiS) + ' DAI\n'
-    mensaje += 'Ripio ------- ' + str('%.4f' % daiR) + ' DAI\n'
-    mensaje += 'Qubit ------ ' + str('%.4f' % daiQ) + ' DAI\n'
-    return mensaje
-
-
-def valorDelDolar():
-    buenbit = bbCDP / buenbit_ven_dol
-    satoshi = satoshiCDP / satoshiVDD
-    qubit = qubitCompDolardirecto
-    mensaje = 'Precio del Dólar en:\n\n'
-    mensaje += "Buenbit  $" + str('%.4f' % buenbit) +\
-               "   NO FUNCIONA ACTUALMENTE\n"
-    mensaje += "Satoshi  $" + str('%.4f' % satoshi) + '\n'
-    mensaje += "Qubit     $" + str('%.4f' % qubit) +\
-               "   NO FUNCIONA ACTUALMENTE \n"
-    mensaje += '\n                 Dolar \n'
-    mensaje += '          Compra    |   Venta'
-    mensaje += 'Oficial: ' + str(dolarCOf) + str(dolarVOf)
-    mensaje += 'Blue' + str(dolarCBl) + str(dolarVBl)
-    return mensaje
-
-
-import plotly.graph_objects as go
-import os
-
 
 
 def dolarT():
@@ -203,4 +88,23 @@ def dolarT():
         os.mkdir("images")
     fig.write_image("images/fig1.png")
 
-dolarT()
+
+def otrasCrypto():
+    # Comprar BTC y venderlo a USD en Decrypto y retirarlo. 
+    dBTC = ((decrCBP * 1.0035) / decrVBD) * 1.0035 * 1.012
+
+    # Comprar USDT y venderlo a USD en Decrypto y retirarlo. 
+    dUSDT = ((decrCUP * 1.0035) / decrVUD) * 1.0035 * 1.012
+
+    # Comprar BTC y venderlo a USD en Decrypto y retirarlo. 
+    sBTC = ((satoshiCBP * 1.01) / satoshiVBD) * 1.01
+
+    return dBTC, dUSDT, sBTC
+
+print(otrasCrypto())
+
+
+
+
+
+

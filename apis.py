@@ -15,16 +15,21 @@ promedio = 291 * ((cont['fastestFee'] + cont['halfHourFee'] + cont['hourFee']) /
 comRipio = promedio * 0.1790313 / 8730
 
 
-# Satochi DAI pesos.
+# Satochi pesos.
 cont = obtenerJson(satoshiPesos)
-satoshiCDP = float(cont['data']['ticker']['DAI']['ask'])
-satoshiVDP = float(cont['data']['ticker']['DAI']['bid'])
+satoshiCDP = float(cont['data']['ticker']['DAI']['ask'])  # Compra DAI Pesos
+satoshiVDP = float(cont['data']['ticker']['DAI']['bid'])  # Venta DAI Pesos
 
+satoshiCBP = float(cont['data']['ticker']['BTC']['ask'])  # Compra BTC Pesos
+satoshiVBP = float(cont['data']['ticker']['BTC']['bid'])  # Venta BTC Pesos
 
-# Satoshi DAI Dolares.
+# Satoshi Dolares.
 cont = obtenerJson(satoshiDolar)
-satoshiCDD = float(cont['data']['ticker']['DAI']['ask'])
-satoshiVDD = float(cont['data']['ticker']['DAI']['bid'])
+satoshiCDD = float(cont['data']['ticker']['DAI']['ask'])  # Compra DAI Dolares
+satoshiVDD = float(cont['data']['ticker']['DAI']['bid'])  # Venta DAI Dolares
+
+satoshiVBD = float(cont['data']['ticker']['BTC']['bid'])  # Venta BTC Dolares
+satoshiVBD = float(cont['data']['ticker']['BTC']['bid'])  # Venta BTC Dolares
 
 
 
@@ -76,8 +81,24 @@ decrCDP = float(cont['data'][3]['dca'])  # Compra DAI Pesos
 decrVDP = float(cont['data'][3]['dcb'])  # Venta DAI Pesos
 
 # Decrypto DAI con Dolares
-decrCDD = float(cont['data'][2]['dca'])  # Compra DAI Pesos
-decrVDD = float(cont['data'][2]['dcb'])  # Venta DAI Pesos
+decrCDD = float(cont['data'][2]['dca'])  # Compra DAI Dolares
+decrVDD = float(cont['data'][2]['dcb'])  # Venta DAI Dolares
+
+# Decrypto BTC con Pesos
+decrCBP = float(cont['data'][1]['dca'])  # Compra BTC Pesos
+decrVBP = float(cont['data'][1]['dcb'])  # Venta BTC Pesos
+
+# Decrypto BTC con Dolares
+decrCBD = float(cont['data'][0]['dca'])  # Compra BTC Dolares
+decrVBD = float(cont['data'][0]['dcb'])  # Venta BTC Dolares
+
+# Decrypto USDT con Pesos
+decrCUP = float(cont['data'][7]['dca'])  # Compra USDT Pesos
+decrVUP = float(cont['data'][7]['dcb'])  # Venta USDT Pesos
+
+# Decrypto USDT con Dolares
+decrCUD = float(cont['data'][4]['dca'])  # Compra USDT Dolares
+decrVUD = float(cont['data'][4]['dcb'])  # Venta USDT Dolares
 
 
 # Dolar Oficial
@@ -100,5 +121,3 @@ dolarVarCCL = float((cont[3]['casa']['variacion']).replace(',','.')) # Dolar blu
 dolarCBol = float((cont[4]['casa']['compra']).replace(',','.')) # Dolar blue compra
 dolarVBol = float((cont[4]['casa']['venta']).replace(',','.')) # Dolar blue venta
 dolarVarBol = float((cont[4]['casa']['variacion']).replace(',','.')) # Dolar blue variacion
-
-
