@@ -87,20 +87,29 @@ def valordai(update, context):
 def daidolar(update, context):
     user = update.message.from_user
     logger.info('El usuario %s (%s) puso daidolar', user.full_name, user.username)
-    baS, baD, qaS, qaD, saS, saD, raS, raD, daD, daS = daiDolar()
+    baB, baS, baD, qaB, qaS, qaD, saB, saS, saD, raB, raS, raD, daB, daD, daS = daiDolar()
 
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text='*Comprar DAI y venderlo a dólares:*\n\n'
              '``` \n' +\
+             'De Buenbit a BuenBit:     $ ' + str('%.4f' % baB) + '\n'
              'De Buenbit a Satoshi:     $ ' + str('%.4f' % baS) + '\n'
-             'De Buenbit a Decrypto:    $ ' + str('%.4f' % baD) + '\n'
+             'De Buenbit a Decrypto:    $ ' + str('%.4f' % baD) + '\n\n'
+
+             'De Qubit a BuenBit:       $ ' + str('%.4f' % qaB) + '\n'
              'De Qubit a Satoshi:       $ ' + str('%.4f' % qaS) + '\n'
-             'De Qubit a Decrypto:      $ ' + str('%.4f' % qaD) + '\n'
+             'De Qubit a Decrypto:      $ ' + str('%.4f' % qaD) + '\n\n'
+
+             'De Satoshi a BuenBit:     $ ' + str('%.4f' % saB) + '\n'
              'De Satoshi a Satoshi:     $ ' + str('%.4f' % saS) + '\n'
-             'De Satoshi a Decrypto:    $ ' + str('%.4f' % saD) + '\n'
+             'De Satoshi a Decrypto:    $ ' + str('%.4f' % saD) + '\n\n'
+
+             'De Ripio a BuenBit:       $ ' + str('%.4f' % raB) + '\n'
              'De Ripio a Satoshi:       $ ' + str('%.4f' % raS) + '\n'
-             'De Ripio a Decrypto:      $ ' + str('%.4f' % raD) + '\n'
+             'De Ripio a Decrypto:      $ ' + str('%.4f' % raD) + '\n\n'
+             
+             'De Decrypto a BuenBit:    $ ' + str('%.4f' % daB) + '\n'
              'De Decrypto a Satoshi:    $ ' + str('%.4f' % daD) + '\n'
              'De Decrypto a Decrypto:   $ ' + str('%.4f' % daS) + '```\n',
         parse_mode=ParseMode.MARKDOWN

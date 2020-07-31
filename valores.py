@@ -35,22 +35,27 @@ def vDPCom():
 def daiDolar():
     # Vender DAI en todos los exchanges. Mejor opción.
     buenbit, qubit, satoshi, ripio, decrypto = cDPCom()
+    baB = buenbit / bbVDD
     baS = (buenbit / satoshiVDD) * 1.01
     baD = (buenbit / decrVDD) * 1.0035 * 1.012  # Sacar USD 1.2%
 
+    qaB = (qubit - 0.7) / bbVDD
     qaS = ((qubit - 0.7) / satoshiVDD) * 1.01
     qaD = ((qubit - 0.7) / decrVDD) * 1.0035 * 1.012  # Sacar USD 1.2%
 
+    saB = (satoshi - 0.5) / bbVDD
     saS = (satoshi / satoshiVDD) * 1.01
     saD = ((satoshi - 0.5) / decrVDD) * 1.0035 * 1.012  # Sacar USD 1.2%
 
+    raB = (ripio - comRipio) / bbVDD
     raS = ((ripio - comRipio) / satoshiVDD) * 1.01
     raD = ((ripio - comRipio) / decrVDD) * 1.0035 * 1.012  # Sacar USD 1.2%
 
-    daD = (decrypto / decrVDD) * 1.0035 * 1.012 # Sacar USD 1.2%
+    daB = decrypto / bbVDD
+    daD = (decrypto / decrVDD) * 1.0035 * 1.012  # Sacar USD 1.2%
     daS = (decrypto / satoshiVDD) * 1.01
 
-    return baS, baD, qaS, qaD, saS, saD, raS, raD, daD, daS
+    return baB, baS, baD, qaB, qaS, qaD, saB, saS, saD, raB, raS, raD, daB, daD, daS
 
 
 def dolarT():

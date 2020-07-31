@@ -47,8 +47,8 @@ bbVDP = float(cont['object']['daiars']['purchase_price'])
 
 
 # BuenBit DAI dolares
-buenbit_com_dol = float(cont['object']['daiusd']['selling_price'])
-buenbit_ven_dol = float(cont['object']['daiusd']['purchase_price'])
+bbCDD = float(cont['object']['daiusd']['selling_price'])
+bbVDD = float(cont['object']['daiusd']['purchase_price'])
 
 
 # Qubit DAI
